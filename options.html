@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <title>Maps Lead Scraper — Options</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #f7f8fa;
+        --card: #fff;
+        --line: #e5e7eb;
+        --text: #111827;
+        --muted: #6b7280;
+        --teal: #0f766e;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family: Manrope, system-ui, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        padding: 32px;
+      }
+      .wrap {
+        max-width: 640px;
+        margin: 0 auto;
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 24px;
+      }
+      h1 {
+        margin: 0 0 8px;
+        font-size: 22px;
+      }
+      p {
+        color: var(--muted);
+        font-size: 14px;
+        margin: 0 0 20px;
+      }
+      h2 {
+        font-size: 15px;
+        margin: 20px 0 8px;
+        color: var(--teal);
+      }
+      label {
+        display: block;
+        font-size: 12px;
+        color: var(--muted);
+        margin: 8px 0 4px;
+      }
+      input {
+        width: 100%;
+        padding: 8px 10px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        font: inherit;
+      }
+      button {
+        margin-top: 16px;
+        background: var(--teal);
+        color: #fff;
+        border: 0;
+        border-radius: 8px;
+        padding: 10px 16px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      #ok {
+        margin-top: 10px;
+        font-size: 13px;
+        color: var(--teal);
+      }
+      code {
+        background: #f3f4f6;
+        padding: 1px 4px;
+        border-radius: 4px;
+        font-size: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <h1>Integrations</h1>
+      <p>
+        Ключи хранятся локально в Chrome. Для Google Sheet удобнее webhook
+        Apps Script (POST JSON с массивом <code>rows</code>).
+      </p>
+
+      <h2>Google Sheet</h2>
+      <label>Spreadsheet ID (опционально)</label>
+      <input id="spreadsheetId" placeholder="1BxiM…" />
+      <label>Apps Script Webhook URL</label>
+      <input id="sheetWebhook" placeholder="https://script.google.com/macros/s/…/exec" />
+
+      <h2>Notion</h2>
+      <label>Integration token</label>
+      <input id="notionToken" type="password" placeholder="secret_…" />
+      <label>Database ID</label>
+      <input id="notionDatabaseId" placeholder="uuid без дефисов или с" />
+      <p style="margin-top: 6px">
+        В базе нужны свойства: <code>Name</code> (title), опционально
+        <code>Phone</code>, <code>Website</code>, <code>Address</code>.
+      </p>
+
+      <h2>Airtable</h2>
+      <label>Personal Access Token</label>
+      <input id="airtableToken" type="password" placeholder="pat…" />
+      <label>Base ID</label>
+      <input id="airtableBase" placeholder="app…" />
+      <label>Table name</label>
+      <input id="airtableTable" placeholder="Leads" />
+
+      <button id="save">Сохранить</button>
+      <div id="ok"></div>
+    </div>
+    <script src="options.js"></script>
+  </body>
+</html>
