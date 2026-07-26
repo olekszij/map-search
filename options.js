@@ -1,11 +1,6 @@
 const keys = [
   "spreadsheetId",
   "sheetWebhook",
-  "notionToken",
-  "notionDatabaseId",
-  "airtableToken",
-  "airtableBase",
-  "airtableTable",
 ];
 
 chrome.storage.local.get(["mls_integrations"], (data) => {
@@ -22,6 +17,6 @@ document.getElementById("save").addEventListener("click", () => {
     cfg[k] = document.getElementById(k).value.trim();
   });
   chrome.storage.local.set({ mls_integrations: cfg }, () => {
-    document.getElementById("ok").textContent = "Сохранено.";
+    document.getElementById("ok").textContent = "Saved.";
   });
 });

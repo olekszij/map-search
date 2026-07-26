@@ -1,4 +1,4 @@
-// selectors.js — единый хаб селекторов + fallbacks (фаза 3)
+// selectors.js — unified selector hub + fallbacks (phase 3)
 const MLS_SELECTORS = {
   feed: ['div[role="feed"]'],
   cardLink: ["a.hfpxzc", 'a[href*="/maps/place"]'],
@@ -39,7 +39,7 @@ const MLS_SELECTORS = {
   back: [
     'button[aria-label="Back"]',
     'button[aria-label="Retour"]',
-    'button[aria-label="Назад"]',
+    'button[aria-label="Back"]',
     'button[aria-label*="Back"]',
     'button[aria-label*="Retour"]',
     'button[jsaction*="back"]',

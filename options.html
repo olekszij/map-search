@@ -87,37 +87,18 @@
   </head>
   <body>
     <div class="wrap">
-      <h1>Integrations</h1>
+      <h1>Google Sheet Integration</h1>
       <p>
-        Ключи хранятся локально в Chrome. Для Google Sheet удобнее webhook
-        Apps Script (POST JSON с массивом <code>rows</code>).
+        Keys are stored locally in Chrome. Use Apps Script Webhook for data export.
       </p>
 
       <h2>Google Sheet</h2>
-      <label>Spreadsheet ID (опционально)</label>
+      <label>Spreadsheet ID (optional)</label>
       <input id="spreadsheetId" placeholder="1BxiM…" />
       <label>Apps Script Webhook URL</label>
       <input id="sheetWebhook" placeholder="https://script.google.com/macros/s/…/exec" />
 
-      <h2>Notion</h2>
-      <label>Integration token</label>
-      <input id="notionToken" type="password" placeholder="secret_…" />
-      <label>Database ID</label>
-      <input id="notionDatabaseId" placeholder="uuid без дефисов или с" />
-      <p style="margin-top: 6px">
-        В базе нужны свойства: <code>Name</code> (title), опционально
-        <code>Phone</code>, <code>Website</code>, <code>Address</code>.
-      </p>
-
-      <h2>Airtable</h2>
-      <label>Personal Access Token</label>
-      <input id="airtableToken" type="password" placeholder="pat…" />
-      <label>Base ID</label>
-      <input id="airtableBase" placeholder="app…" />
-      <label>Table name</label>
-      <input id="airtableTable" placeholder="Leads" />
-
-      <button id="save">Сохранить</button>
+      <button id="save">Save</button>
       <div id="ok"></div>
     </div>
     <script src="options.js"></script>

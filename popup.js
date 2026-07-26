@@ -29,33 +29,33 @@ document.querySelectorAll("#zoneSeg button").forEach((btn) => {
 document.getElementById("show").addEventListener("click", async () => {
   const tab = await getActiveTab();
   if (!tab || !tab.url || !tab.url.includes("google.com/maps")) {
-    setStatus("Открой вкладку google.com/maps.");
+    setStatus("Open google.com/maps tab.");
     return;
   }
   const resp = await sendToTab(tab.id, { type: "showPanel" });
-  setStatus(resp ? "Панель на карте." : "F5 на Maps и снова.");
+  setStatus(resp ? "Panel on map." : "F5 on Maps and try again.");
 });
 
 document.getElementById("start").addEventListener("click", async () => {
   const tab = await getActiveTab();
   if (!tab || !tab.url || !tab.url.includes("google.com/maps")) {
-    setStatus("Открой google.com/maps.");
+    setStatus("Open google.com/maps.");
     return;
   }
   const resp = await sendToTab(tab.id, { type: "start", delay: 1400, loadAll });
   setStatus(
     resp
       ? loadAll
-        ? "Старт: весь список. Смотри панель на Maps."
-        : "Старт: зона. Смотри панель на Maps."
-      : "F5 на Maps, потом снова Старт."
+        ? "Start: full list. See panel on Maps."
+        : "Start: zone. See panel on Maps."
+      : "F5 on Maps, then Start again."
   );
 });
 
 document.getElementById("stop").addEventListener("click", async () => {
   const tab = await getActiveTab();
   await sendToTab(tab.id, { type: "stop" });
-  setStatus("Стоп отправлен.");
+  setStatus("Stop sent.");
 });
 
 (async () => {
@@ -64,7 +64,7 @@ document.getElementById("stop").addEventListener("click", async () => {
   const resp = await sendToTab(tab.id, { type: "ping" });
   if (resp && resp.count) {
     setStatus(
-      `${resp.running ? (resp.paused ? "Пауза" : "Идёт сбор") : "Готово"} · ${resp.count} строк`
+      `${resp.running ? (resp.paused ? "Paused" : "Running") : "Ready"} · ${resp.count} rows`
     );
   }
 })();

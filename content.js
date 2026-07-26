@@ -32,29 +32,32 @@
 
   const COLS = [
     { key: "score", label: "⭐", w: 36 },
-    { key: "name", label: "Название", w: 140 },
-    { key: "category", label: "Категория", w: 90 },
-    { key: "address", label: "Адрес", w: 140 },
-    { key: "phoneE164", label: "Телефон", w: 100 },
-    { key: "website", label: "Сайт", w: 110 },
+    { key: "name", label: "Name", w: 140 },
+    { key: "category", label: "Category", w: 90 },
+    { key: "address", label: "Address", w: 140 },
+    { key: "phoneE164", label: "Phone", w: 100 },
+    { key: "website", label: "Website", w: 110 },
     { key: "email", label: "Email", w: 90 },
     { key: "rating", label: "★", w: 36 },
-    { key: "reviews", label: "Отз.", w: 44 },
-    { key: "openNow", label: "Сейчас", w: 70 },
-    { key: "hours", label: "Часы", w: 90 },
-    { key: "businessStatus", label: "Статус", w: 70 },
+    { key: "reviews", label: "Reviews", w: 44 },
+    { key: "openNow", label: "Open Now", w: 70 },
+    { key: "hours", label: "Hours", w: 90 },
+    { key: "businessStatus", label: "Status", w: 70 },
     { key: "priceLevel", label: "€", w: 36 },
     { key: "placeId", label: "Place ID", w: 90 },
     { key: "postalCode", label: "CP", w: 50 },
-    { key: "city", label: "Город", w: 70 },
+    { key: "city", label: "City", w: 70 },
     { key: "lat", label: "Lat", w: 60 },
     { key: "lng", label: "Lng", w: 60 },
     { key: "bookingUrl", label: "Booking", w: 80 },
     { key: "social", label: "Social", w: 80 },
     { key: "websiteCheck", label: "Site✓", w: 70 },
-    { key: "leadStatus", label: "Лид", w: 70 },
-    { key: "scrapedAt", label: "Дата", w: 80 },
-    { key: "queryZone", label: "Зона/запрос", w: 100 },
+    { key: "leadStatus", label: "Lead", w: 70 },
+    { key: "scrapedAt", label: "Date", w: 80 },
+    { key: "queryZone", label: "Zone/Query", w: 100 },
+    { key: "about", label: "About", w: 120 },
+    { key: "whatsapp", label: "WhatsApp", w: 90 },
+    { key: "mapsUrl", label: "Maps URL", w: 120 },
   ];
 
   function sleep(ms) {
@@ -342,7 +345,7 @@
     if (timings.length && done < total) {
       const avg = timings.reduce((a, b) => a + b, 0) / timings.length;
       const left = Math.round(((total - done) * avg) / 1000);
-      eta = ` · ETA ~${left}с`;
+      eta = ` · ETA ~${left}s`;
     }
     if (label) label.textContent = `${done}/${total}${eta}`;
   }
@@ -354,7 +357,7 @@
     const rows = getFilteredRows();
     if (!rows.length) {
       wrap.innerHTML =
-        '<div class="mls-empty">Нет строк по фильтру — сними фильтр или жми Старт.</div>';
+        '<div class="mls-empty">No rows by filter — remove filter or click Start.</div>';
       return;
     }
     let html = '<table class="mls-table"><thead><tr>';
@@ -371,7 +374,7 @@
         let val = r[c.key];
         if (c.key === "website") {
           if (!val) {
-            html += '<td class="mls-nosite-cell">— нет —</td>';
+            html += '<td class="mls-nosite-cell">— none —</td>';
             return;
           }
           html += `<td class="mls-site"><a href="${esc(val)}" target="_blank" rel="noopener">${esc(
@@ -444,50 +447,48 @@
       <div class="mls-head" id="mls-drag">
         <div class="mls-title">Maps Lead Scraper
           <span class="mls-badge" id="mls-count">0</span>
-          <span class="mls-badge mls-amber" id="mls-leads" title="Без сайта">0⭐</span>
+          <span class="mls-badge mls-amber" id="mls-leads" title="No website">0⭐</span>
         </div>
         <div class="mls-head-actions">
-          <button type="button" id="mls-toggle" title="Свернуть">▾</button>
+          <button type="button" id="mls-toggle" title="Collapse">▾</button>
         </div>
       </div>
       <div id="mls-body">
         <div class="mls-toolbar">
           <div class="mls-seg" id="mls-zone-seg">
-            <button type="button" data-zone="zone" class="active">Зона</button>
-            <button type="button" data-zone="all">Весь список</button>
+            <button type="button" data-zone="zone" class="active">Zone</button>
+            <button type="button" data-zone="all">Full List</button>
           </div>
           <div class="mls-stepper">
             <button type="button" id="mls-delay-minus">−</button>
             <input id="mls-delay" type="number" value="1400" min="900" step="100" />
             <button type="button" id="mls-delay-plus">+</button>
-            <span class="mls-hint">мс</span>
+            <span class="mls-hint">ms</span>
           </div>
           <label class="mls-toggle-row"><input id="mls-random" type="checkbox" checked /> Random 1.2–2.5s</label>
         </div>
         <div class="mls-btns">
-          <button id="mls-start" type="button">Старт</button>
-          <button id="mls-pause" type="button">Пауза</button>
-          <button id="mls-clear" type="button" class="ghost">Очистить</button>
+          <button id="mls-start" type="button">Start</button>
+          <button id="mls-pause" type="button">Pause</button>
+          <button id="mls-clear" type="button" class="ghost">Clear</button>
           <button id="mls-csv" type="button" class="outline">CSV</button>
-          <button id="mls-copy" type="button" class="outline">Копировать</button>
+          <button id="mls-copy" type="button" class="outline">Copy</button>
           <button id="mls-xlsx" type="button" class="outline">Excel</button>
         </div>
         <div class="mls-btns mls-btns2">
-          <button id="mls-check" type="button" class="ghost">Проверить сайты</button>
+          <button id="mls-check" type="button" class="ghost">Check Sites</button>
           <button id="mls-sheet" type="button" class="ghost">Sheet</button>
-          <button id="mls-notion" type="button" class="ghost">Notion</button>
-          <button id="mls-airtable" type="button" class="ghost">Airtable</button>
           <button id="mls-save-session" type="button" class="ghost">Save</button>
           <button id="mls-load-session" type="button" class="ghost">Load</button>
         </div>
         <div class="mls-filters">
           <div class="mls-chips" id="mls-chips">
-            <button type="button" data-chip="all" class="active">Все</button>
-            <button type="button" data-chip="nosite">Без сайта</button>
-            <button type="button" data-chip="phone">Есть телефон</button>
+            <button type="button" data-chip="all" class="active">All</button>
+            <button type="button" data-chip="nosite">No Website</button>
+            <button type="button" data-chip="phone">Has Phone</button>
           </div>
-          <input id="mls-search" type="search" placeholder="Поиск по названию…" />
-          <label class="mls-rating">Мин ★
+          <input id="mls-search" type="search" placeholder="Search by name…" />
+          <label class="mls-rating">Min ★
             <input id="mls-minrating" type="number" min="0" max="5" step="0.1" value="0" />
           </label>
         </div>
@@ -495,8 +496,8 @@
           <div class="mls-progress"><div id="mls-progress-bar"></div></div>
           <span id="mls-progress-label">0/0</span>
         </div>
-        <div id="mls-status">Зум → «Rechercher dans cette zone» → Старт. Данные дописываются, не затираются.</div>
-        <div id="mls-table-wrap"><div class="mls-empty">Таблица пуста — жми Старт.</div></div>
+        <div id="mls-status">Zoom → 'Rechercher dans cette zone' → Start. Data is appended, not overwritten.</div>
+        <div id="mls-table-wrap"><div class="mls-empty">Table empty — click Start.</div></div>
         <div id="mls-sessions" class="mls-sessions hidden"></div>
       </div>
       <div id="mls-resize"></div>
@@ -754,19 +755,19 @@
       }
       if (paused) {
         paused = false;
-        document.getElementById("mls-pause").textContent = "Пауза";
-        setPanelStatus("Продолжаем…");
+        document.getElementById("mls-pause").textContent = "Pause";
+        setPanelStatus("Continuing…");
         persist();
       } else {
         paused = true;
-        document.getElementById("mls-pause").textContent = "Продолжить";
-        setPanelStatus("Пауза. Жми Продолжить.");
+        document.getElementById("mls-pause").textContent = "Resume";
+        setPanelStatus("Paused. Click Resume.");
         persist();
       }
     });
     document.getElementById("mls-clear").addEventListener("click", () => {
       if (running) {
-        setPanelStatus("Сначала Пауза/Стоп.");
+        setPanelStatus("First Pause/Stop.");
         return;
       }
       results = [];
@@ -776,15 +777,13 @@
       persist();
       renderTable();
       updateProgress(0, 0);
-      setPanelStatus("Таблица очищена.");
+      setPanelStatus("Table cleared.");
     });
     document.getElementById("mls-csv").addEventListener("click", () => exportCsv(getFilteredRows()));
     document.getElementById("mls-copy").addEventListener("click", () => copyTsv(getFilteredRows()));
     document.getElementById("mls-xlsx").addEventListener("click", () => exportExcel(getFilteredRows()));
     document.getElementById("mls-check").addEventListener("click", () => checkSites());
     document.getElementById("mls-sheet").addEventListener("click", () => pushProvider("sheet"));
-    document.getElementById("mls-notion").addEventListener("click", () => pushProvider("notion"));
-    document.getElementById("mls-airtable").addEventListener("click", () => pushProvider("airtable"));
     document.getElementById("mls-save-session").addEventListener("click", () => saveSession());
     document.getElementById("mls-load-session").addEventListener("click", () => toggleSessions());
 
@@ -792,16 +791,16 @@
   }
 
   function exportHeaders() {
-    return COLS.map((c) => c.label).concat(["Maps URL", "Phone raw", "Assignee", "Notes", "Source"]);
+    return COLS.map((c) => c.label).concat(["Phone raw", "Assignee", "Notes", "Source"]);
   }
   function exportValues(r) {
     return COLS.map((c) => r[c.key] ?? "")
-      .concat([r.mapsUrl || "", r.phone || "", r.assignee || "", r.notes || "", r.source || "google_maps"]);
+      .concat([r.phone || "", r.assignee || "", r.notes || "", r.source || "google_maps"]);
   }
 
   function exportCsv(rows) {
     if (!rows.length) {
-      setPanelStatus("Нечего экспортировать.");
+      setPanelStatus("Nothing to export.");
       return;
     }
     const lines = [exportHeaders().join(";")];
@@ -818,27 +817,27 @@
     a.download = "maps_leads_" + new Date().toISOString().slice(0, 10) + ".csv";
     a.click();
     URL.revokeObjectURL(a.href);
-    setPanelStatus(`CSV: ${rows.length} строк.`);
+    setPanelStatus(`CSV: ${rows.length} rows.`);
   }
 
   async function copyTsv(rows) {
     if (!rows.length) {
-      setPanelStatus("Нечего копировать.");
+      setPanelStatus("Nothing to copy.");
       return;
     }
     const lines = [exportHeaders().join("\t")];
     rows.forEach((r) => lines.push(exportValues(r).join("\t")));
     try {
       await navigator.clipboard.writeText(lines.join("\n"));
-      setPanelStatus(`Скопировано ${rows.length} строк (TSV).`);
+      setPanelStatus(`Copied ${rows.length} rows (TSV).`);
     } catch (_) {
-      setPanelStatus("Не удалось копировать в буфер.");
+      setPanelStatus("Failed to copy to clipboard.");
     }
   }
 
   function exportExcel(rows) {
     if (!rows.length) {
-      setPanelStatus("Нечего экспортировать.");
+      setPanelStatus("Nothing to export.");
       return;
     }
     let html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel"><head><meta charset="utf-8" /></head><body><table>';
@@ -858,19 +857,19 @@
     a.download = "maps_leads_" + new Date().toISOString().slice(0, 10) + ".xls";
     a.click();
     URL.revokeObjectURL(a.href);
-    setPanelStatus(`Excel: ${rows.length} строк.`);
+    setPanelStatus(`Excel: ${rows.length} rows.`);
   }
 
   function checkSites() {
     const urls = results.map((r) => r.website).filter(Boolean);
     if (!urls.length) {
-      setPanelStatus("Нет сайтов для проверки.");
+      setPanelStatus("No websites to check.");
       return;
     }
-    setPanelStatus(`Проверяю ${urls.length} сайтов…`);
+    setPanelStatus(`Checking ${urls.length} websites…`);
     chrome.runtime.sendMessage({ type: "checkWebsites", urls }, (resp) => {
       if (!resp || !resp.ok) {
-        setPanelStatus("Ошибка проверки: " + ((resp && resp.error) || "bg"));
+        setPanelStatus("Check error: " + ((resp && resp.error) || "bg"));
         return;
       }
       const map = {};
@@ -882,26 +881,26 @@
       );
       persist();
       renderTable();
-      setPanelStatus("Проверка сайтов готова.");
+      setPanelStatus("Website check done.");
     });
   }
 
   function pushProvider(provider) {
     const rows = getFilteredRows();
-    setPanelStatus(`Выгрузка в ${provider}…`);
+    setPanelStatus(`Exporting to ${provider}…`);
     chrome.runtime.sendMessage({ type: "pushIntegration", provider, rows }, (resp) => {
       if (!resp || !resp.ok) {
-        setPanelStatus((resp && resp.error) || "Ошибка выгрузки. Настрой Options.");
+        setPanelStatus((resp && resp.error) || "Export error. Configure Options.");
         return;
       }
-      setPanelStatus(`Выгружено в ${provider}: ${resp.count}`);
+      setPanelStatus(`Exported to ${provider}: ${resp.count}`);
     });
   }
 
   function saveSession() {
     const name =
       prompt(
-        "Имя сессии",
+        "Session name",
         `${readSearchQuery() || "maps"} ${new Date().toISOString().slice(0, 10)}`
       ) || "";
     if (!name.trim()) return;
@@ -914,7 +913,7 @@
         createdAt: new Date().toISOString(),
       });
       chrome.storage.local.set({ mls_sessions: sessions.slice(0, 30) }, () => {
-        setPanelStatus("Сессия сохранена: " + name.trim());
+        setPanelStatus("Session saved: " + name.trim());
       });
     });
   }
@@ -928,7 +927,7 @@
     chrome.storage.local.get(["mls_sessions"], (data) => {
       const sessions = data.mls_sessions || [];
       if (!sessions.length) {
-        setPanelStatus("Нет сохранённых сессий.");
+        setPanelStatus("No saved sessions.");
         return;
       }
       box.classList.remove("hidden");
@@ -946,7 +945,7 @@
           seenKeys = new Set(results.map((r) => r.placeId).filter(Boolean));
           persist();
           renderTable();
-          setPanelStatus("Загружено: " + s.name);
+          setPanelStatus("Loaded: " + s.name);
           box.classList.add("hidden");
         });
       });
@@ -1027,7 +1026,7 @@
         idle = 0;
         last = map.size;
       }
-      setPanelStatus(`Догрузка… ${map.size}`);
+      setPanelStatus(`Loading… ${map.size}`);
     }
     feed.scrollTop = 0;
     await sleep(300);
@@ -1110,7 +1109,7 @@
     if (looksLikePhone(aria)) return cleanLabeledText(aria);
     const text = (el.textContent || "").trim();
     if (looksLikePhone(text)) return cleanLabeledText(text);
-    // иногда номер в дочернем span
+    // sometimes number in child span
     const spans = el.querySelectorAll("div, span");
     for (const sp of spans) {
       const t = (sp.textContent || "").trim();
@@ -1120,7 +1119,7 @@
   }
 
   function findPhoneAnywhere() {
-    // 1) явные tel: ссылки
+    // 1) explicit tel: links
     const telA = document.querySelector('a[href^="tel:"]');
     if (telA) {
       const p = extractPhoneFromEl(telA);
@@ -1134,13 +1133,13 @@
       const p = extractPhoneFromEl(byId);
       if (p) return p;
     }
-    // 3) селекторы из хаба
+    // 3) selectors from hub
     const phoneBtn = firstMatch(S.phone);
     if (phoneBtn) {
       const p = extractPhoneFromEl(phoneBtn);
       if (p) return p;
     }
-    // 4) любой элемент с aria-label, где есть похожий на FR/EN телефон
+    // 4) any element with aria-label containing FR/EN phone
     const labeled = document.querySelectorAll("[aria-label]");
     for (const el of labeled) {
       const aria = el.getAttribute("aria-label") || "";
@@ -1326,7 +1325,7 @@
     stopRequested = false;
     paused = false;
     const pauseBtn = document.getElementById("mls-pause");
-    if (pauseBtn) pauseBtn.textContent = "Пауза";
+    if (pauseBtn) pauseBtn.textContent = "Pause";
     searchQuery = readSearchQuery();
     timings = [];
     skipped = 0;
@@ -1334,26 +1333,26 @@
     if (!resume) {
       // append: do NOT clear results / seenKeys
       setPanelStatus(
-        loadAllMode ? "Догрузка всего списка…" : "Снимок зоны (append + dedupe)…"
+        loadAllMode ? "Loading full list…" : "Zone snapshot (append + dedupe)…"
       );
       try {
         const cards = await collectCards(loadAllMode);
         pendingCards = cards.filter((c) => c.key && !seenKeys.has(c.key));
         queueIndex = 0;
       } catch (e) {
-        setPanelStatus("Ошибка списка: " + (e && e.message));
+        setPanelStatus("List error: " + (e && e.message));
         running = false;
         persist();
         return;
       }
     } else {
-      setPanelStatus("Resume очереди…");
+      setPanelStatus("Resuming queue…");
     }
 
     const total = pendingCards.length;
     if (!total || queueIndex >= total) {
       setPanelStatus(
-        total ? "Очередь пуста (всё уже в таблице)." : "0 карточек. Сделай «Rechercher dans cette zone»."
+        total ? "Queue empty (all already in table)." : "0 cards. Do 'Rechercher dans cette zone'."
       );
       running = false;
       persist();
@@ -1369,8 +1368,8 @@
       if (stopRequested) break;
       if (detectCaptcha()) {
         paused = true;
-        if (pauseBtn) pauseBtn.textContent = "Продолжить";
-        setPanelStatus("Капча / unusual traffic — реши и жми Продолжить.");
+        if (pauseBtn) pauseBtn.textContent = "Resume";
+        setPanelStatus("Captcha / unusual traffic — solve and click Resume.");
         persist();
         await waitWhilePaused();
         if (stopRequested) break;
@@ -1379,7 +1378,7 @@
       const card = pendingCards[queueIndex];
       if (!card.key || seenKeys.has(card.key)) continue;
       seenKeys.add(card.key);
-      setPanelStatus(`Карточка ${queueIndex + 1}/${total}…\n${card.label || card.key}`);
+      setPanelStatus(`Card ${queueIndex + 1}/${total}…\n${card.label || card.key}`);
       const t0 = Date.now();
       const delay = nextDelay();
 
@@ -1396,8 +1395,8 @@
           skipped++;
           if (outcome && outcome.reason === "captcha") {
             paused = true;
-            if (pauseBtn) pauseBtn.textContent = "Продолжить";
-            setPanelStatus("Капча — реши и жми Продолжить.");
+            if (pauseBtn) pauseBtn.textContent = "Resume";
+            setPanelStatus("Captcha — solve and click Resume.");
             queueIndex = Math.max(0, queueIndex - 1);
             seenKeys.delete(card.key);
             persist();
@@ -1411,7 +1410,7 @@
         }
 
         const row = enrichRow(outcome.data, card);
-        if (!row.name) row.name = "(без названия)";
+        if (!row.name) row.name = "(no name)";
         const existIdx = results.findIndex(
           (r) => r.placeId && row.placeId && r.placeId === row.placeId
         );
@@ -1422,13 +1421,13 @@
         renderTable();
         updateProgress(queueIndex + 1, total);
         setPanelStatus(
-          `В таблице: ${results.length} · очередь ${queueIndex + 1}/${total} (проп. ${skipped})\n${row.name}`
+          `In table: ${results.length} · queue ${queueIndex + 1}/${total} (skipped ${skipped})\n${row.name}`
         );
         safeSend({ type: "progress", count: results.length, total, last: row.name });
       } catch (e) {
         skipped++;
         clickBackToList();
-        setPanelStatus(`Ошибка: ${(e && e.message) || e}`);
+        setPanelStatus(`Error: ${(e && e.message) || e}`);
         await sleep(400);
       }
       persist();
@@ -1436,12 +1435,12 @@
 
     running = false;
     paused = false;
-    if (pauseBtn) pauseBtn.textContent = "Пауза";
+    if (pauseBtn) pauseBtn.textContent = "Pause";
     persist();
     clickBackToList();
     const nosite = results.filter((r) => !r.website).length;
     setPanelStatus(
-      `Готово. ${results.length} строк (⭐ без сайта: ${nosite}, проп. ${skipped}).`
+      `Done. ${results.length} rows (⭐ no website: ${nosite}, skipped ${skipped}).`
     );
     safeSend({ type: "done", results });
   }
@@ -1515,7 +1514,7 @@
         renderTable();
         if (results.length) {
           setPanelStatus(
-            `Восстановлено ${results.length}. Можно Старт (допишет) или Продолжить очередь.`
+            `Restored ${results.length}. Can Start (will append) or Resume queue.`
           );
         }
       }

@@ -1,4 +1,4 @@
-// background.js — проверка сайтов + интеграции CRM
+// background.js — website check + CRM integrations
 chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
   if (msg.type === "checkWebsites") {
     checkWebsites(msg.urls || [])
@@ -39,7 +39,7 @@ async function checkOne(url) {
     if (res.ok || (res.status >= 300 && res.status < 400)) {
       return { url: u, status: "alive", http: res.status };
     }
-    // некоторые сайты режут HEAD
+    // some sites block HEAD
     const ctrl2 = new AbortController();
     const t2 = setTimeout(() => ctrl2.abort(), 8000);
     const res2 = await fetch(u, {
@@ -76,14 +76,14 @@ function getConfig() {
 
 async function pushIntegration(provider, rows) {
   const cfg = await getConfig();
-  if (!rows.length) return { ok: false, error: "Нет строк для выгрузки" };
+  if (!rows.length) return { ok: false, error: "No rows to export" };
 
   if (provider === "sheet") {
     const webhook = (cfg.sheetWebhook || "").trim();
     if (!webhook) {
       return {
         ok: false,
-        error: "Укажи Google Apps Script webhook в Options",
+        error: "Specify Google Apps Script webhook in Options",
       };
     }
     const res = await fetch(webhook, {
@@ -95,74 +95,5 @@ async function pushIntegration(provider, rows) {
     return { ok: true, count: rows.length };
   }
 
-  if (provider === "notion") {
-    const token = (cfg.notionToken || "").trim();
-    const db = (cfg.notionDatabaseId || "").trim();
-    if (!token || !db) {
-      return { ok: false, error: "Notion token + database id в Options" };
-    }
-    let n = 0;
-    for (const r of rows.slice(0, 50)) {
-      const props = {
-        Name: { title: [{ text: { content: String(r.name || "").slice(0, 200) } }] },
-      };
-      if (r.phone) props.Phone = { phone_number: String(r.phone).slice(0, 60) };
-      if (r.website) props.Website = { url: String(r.website).slice(0, 500) };
-      if (r.address) {
-        props.Address = {
-          rich_text: [{ text: { content: String(r.address).slice(0, 300) } }],
-        };
-      }
-      const res = await fetch("https://api.notion.com/v1/pages", {
-        method: "POST",
-        headers: {
-          Authorization: "Bearer " + token,
-          "Notion-Version": "2022-06-28",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ parent: { database_id: db }, properties: props }),
-      });
-      if (res.ok) n++;
-    }
-    return { ok: true, count: n };
-  }
-
-  if (provider === "airtable") {
-    const token = (cfg.airtableToken || "").trim();
-    const base = (cfg.airtableBase || "").trim();
-    const table = (cfg.airtableTable || "").trim();
-    if (!token || !base || !table) {
-      return { ok: false, error: "Airtable token + base + table в Options" };
-    }
-    const records = rows.slice(0, 10).map((r) => ({
-      fields: {
-        Name: r.name || "",
-        Phone: r.phone || "",
-        Website: r.website || "",
-        Address: r.address || "",
-        Category: r.category || "",
-        Rating: r.rating || "",
-        "Maps URL": r.mapsUrl || "",
-        Score: r.score || "",
-      },
-    }));
-    const res = await fetch(
-      `https://api.airtable.com/v0/${encodeURIComponent(base)}/${encodeURIComponent(table)}`,
-      {
-        method: "POST",
-        headers: {
-          Authorization: "Bearer " + token,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ records }),
-      }
-    );
-    if (!res.ok) {
-      const t = await res.text();
-      return { ok: false, error: "Airtable " + res.status + ": " + t.slice(0, 120) };
-    }
-    return { ok: true, count: records.length };
-  }
-
-  return { ok: false, error: "Неизвестный provider" };
+  return { ok: false, error: "Unknown provider" };
 }

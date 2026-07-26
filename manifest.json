@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "Maps Lead Scraper",
-  "version": "2.1.1",
-  "description": "Сбор лидов с Google Maps: живая таблица, фильтры, сессии, Excel, CRM-интеграции",
+  "version": "2.2.0",
+  "description": "Google Maps lead scraper: live table, filters, sessions, Excel, Google Sheet integration",
   "permissions": ["activeTab", "scripting", "storage"],
   "host_permissions": [
     "https://www.google.com/maps/*",
